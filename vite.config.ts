@@ -19,6 +19,7 @@ export default defineConfig({
 		})
 	],
 	build: {
+		minify: true,
 		outDir: './dist',	
 		lib: {
 			entry: resolve(__dirname, "./sources/index.ts"),

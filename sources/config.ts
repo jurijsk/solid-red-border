@@ -4,7 +4,7 @@ export let debug = true;
 
 const defaultConfig =  {
 	debug: debug,
-	markers: { defaultStyleTemplate: 'border: 1x solid {color};' }
+	markers: { defaultStyleTemplate: 'border: 1px solid {color};' }
 };
 
 export const config = Object.assign({}, defaultConfig);
