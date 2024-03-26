@@ -9,6 +9,8 @@ reconfig({'debug': true, markers: { defaultStyleTemplate: 'background-color: {co
 
 let marker = getMarker('one');
 
+marker.setCanvasElement(document.getElementById('app'));
+
 setStyle('red', 'border: 1px solid red');
 setStyle('green', 'border: 1px solid green');
 setStyle('blue', 'border: 1px solid blue');
@@ -22,6 +24,6 @@ marker.highlight({ top: 100, left: 100, width: 100, height: 100 }, 'green', 'nex
 
 marker.smudge('current');
 
-marker.erase('next');
+marker.remove('next');
 
-marker.erase();
+marker.remove();
