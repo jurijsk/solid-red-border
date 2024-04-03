@@ -6,7 +6,7 @@ export function dbg(func: () => void) {
 
 
 
-export function halt(func: () => boolean) {
+export function halt(func: () => void) {
 	if(debug){
 		debugger;
 		func();
