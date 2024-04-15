@@ -78,8 +78,8 @@ class Marker {
 				element.style.position = 'absolute';
 				element.style.top = (what.top || what.x) + 'px';
 				element.style.left = (what.left || what.y) + 'px';
-				element.style.width = what.width + 'px';
-				element.style.height = what.height + 'px';
+				element.style.width = (what.width || 1) + 'px';
+				element.style.height = (what.height || 1) + 'px';
 			}
 
 			if (styles.indexOf(styleName) === -1) {
