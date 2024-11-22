@@ -1,14 +1,14 @@
 /// <reference types="vitest" />
-import { resolve } from 'path'
+import { resolve } from 'path';
 import { defineConfig } from "vite";
 import packageJson from "./package.json";
-import dts from 'vite-plugin-dts'
+import dts from 'vite-plugin-dts';
 
 const packageName = packageJson.name;
 
 
 export default defineConfig({
-	
+
 	plugins: [
 		dts({
 			outDir: 'dist', // dts.root + 'dist' => where we need to rollup.
@@ -19,8 +19,9 @@ export default defineConfig({
 		})
 	],
 	build: {
-		minify: true,
-		outDir: './dist',	
+		minify: false,
+		outDir: './dist',
+		sourcemap: true,
 		lib: {
 			entry: resolve(__dirname, "./sources/index.ts"),
 			name: 'index',

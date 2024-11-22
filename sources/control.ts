@@ -1,13 +1,14 @@
 import { debug } from "./config";
 
-export function dbg(func: () => void) {
-	debug && func();
+export function dbg<T>(func: () => T) {
+	if(debug) {
+		return func();
+	}
+	return undefined;
 }
 
-
-
 export function halt(func: () => void) {
-	if(debug){
+	if(debug) {
 		debugger;
 		func();
 	}
