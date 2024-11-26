@@ -40,8 +40,7 @@ export function setStyle(name: string, style: string) {
 	htmlStyle.sheet?.insertRule(`.${name} { ${style} }`);
 }
 
-class Marker {
-
+export class Marker {
 	setCanvasElement: (canvasElement: HTMLElement | null) => void;
 	highlight: (what: BoundingBox | HTMLElement, styleName: string, id?: string) => HTMLElement | null;
 	smudge: (id: string) => HTMLElement | null;
