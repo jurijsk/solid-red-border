@@ -22,7 +22,7 @@ marker.highlight({ top: 75, left: 75, width: 100, height: 100 }, 'red', 'current
 marker.highlight({ top: 75, left: 75, width: 100, height: 100 }, 'aqua', 'current');
 marker.highlight({ top: 100, left: 100, width: 100, height: 100 }, 'green', 'next');
 
-marker.smudge('current');
+marker.delighlight('current');
 
 marker.remove('next');
 
@@ -35,15 +35,15 @@ function experiment() {
 	const iamgeElements = document.querySelectorAll('img');
 
 
-	for (let i = 0; i < iamgeElements.length; i++) {
+	for(let i = 0;i < iamgeElements.length;i++) {
 		const img = iamgeElements[i];
 		const request = new Request(img.currentSrc || img.src);
 
 		fetch(request)
-			.then((response) =>  response.blob())
+			.then((response) => response.blob())
 			.then((data) => {
 				const reader = new FileReader();
-				
+
 
 				reader.addEventListener('load', () => {
 					let dataUrl = <string> reader.result;
@@ -59,8 +59,8 @@ function experiment() {
 					//console.log('Image loaded', dataUrl);
 				}, false);
 
-				reader.readAsDataURL(data)
+				reader.readAsDataURL(data);
 			});
 	}
 }
-experiment()
+experiment();

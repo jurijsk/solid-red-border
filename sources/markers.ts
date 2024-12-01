@@ -6,14 +6,14 @@ type BoundingBox = {
 	x?: number;
 	left: number;
 	y?: number;
-	width: number;
-	height: number;
+	width?: number;
+	height?: number;
 };
 
 let markers = new Map<string, Marker>();
 
 /**  Returns named or generic marker. 
-Marker gives access to highlight, smudge (dehighlight) and erase methods.
+Marker gives access to highlight, dehighlight and erase methods.
 Marker does not have set color or style. Style of color is pased to hightlight() method.
 Marker keeps track of highlights so that when you have to erase highlights, you can do that */
 export function getMarker(name: string = 'generic', canvasElement?: HTMLElement) {
@@ -40,20 +40,30 @@ export function setStyle(name: string, style: string) {
 	htmlStyle.sheet?.insertRule(`.${name} { ${style} }`);
 }
 
+//let markersConfig = config.markers;
+//function reconfig(config: Config) {
+//	markersConfig = config.markers;
+//}
+
+//subscribe(reconfig);
+
+
+const DEFAULT_STYLE_TEMPLATE_TOKEN = '<default>';
 export class Marker {
 	setCanvasElement: (canvasElement: HTMLElement | null) => void;
 	highlight: (what: BoundingBox | HTMLElement, styleName: string, id?: string) => HTMLElement | null;
-	smudge: (id: string) => HTMLElement | null;
+	delighlight: (id: string) => HTMLElement | null;
 	remove: (id?: string) => void;
 	setCssStyleTemplate: (template: string) => void;
 	empty: () => void;
 	refull: () => void;
 
-	constructor(public name: string, public canvasElement: HTMLElement = document.body) {
-		let cssStyleTemplate: string | null = null;
 
-		function setCssStyleTemplate(template: string) {
-			cssStyleTemplate = template;
+	constructor(public name: string, public canvasElement: HTMLElement = document.body) {
+		let styleTemplate: string | null = DEFAULT_STYLE_TEMPLATE_TOKEN;
+
+		function setCssStyleTemplate(template: string | null | undefined) {
+			styleTemplate = template || null;
 		}
 
 		function setCanvasElement(element: HTMLElement | null) {
@@ -62,12 +72,12 @@ export class Marker {
 
 		let hightlightElements = new Array<HTMLElement>();
 
-		function highlight(what: BoundingBox | HTMLElement, styleName: string, id?: string) {
+		function highlight(what: BoundingBox | HTMLElement, color?: string, id?: string) {
 			let element: HTMLElement | null = null;
 			if(what instanceof HTMLElement) {
 				element = what;
 			} else {
-				element = smudge(id || '');
+				element = delighlight(id || '');
 				if(!element) {
 					element = document.createElement('span');
 
@@ -77,26 +87,36 @@ export class Marker {
 				}
 
 				element.style.position = 'absolute';
-				element.style.top = (what.top || what.x) + 'px';
-				element.style.left = (what.left || what.y) + 'px';
+				element.style.top = (what.top || what.x || 0) + 'px';
+				element.style.left = (what.left || what.y || 0) + 'px';
 				element.style.width = (what.width || 1) + 'px';
 				element.style.height = (what.height || 1) + 'px';
+
+				name && element.classList.add(name);
+				element.setAttribute('rsb-marked', name);
 			}
 
-			if(styles.indexOf(styleName) === -1) {
-				const template = cssStyleTemplate || config.markers.defaultStyleTemplate;
-				setStyle(styleName, template.replaceAll('{color}', styleName));
-			}
+			if(color) {
+				element.classList.add(color);
+				if(styles.indexOf(color) === -1) {
+					const template = styleTemplate === DEFAULT_STYLE_TEMPLATE_TOKEN
+						? config.markers.defaultStyleTemplate
+						: styleTemplate;
 
-			element.classList.add(styleName);
+					if(template) {
+						setStyle(color, template.replaceAll('{color}', color));
+					}
+
+				}
+			}
 			if(isEmpty) {
-				element.style.setProperty('display', 'none');
+				element.classList.add('empty-marker');
 			}
 			return element;
 		}
 
 
-		function smudge(id: string) {
+		function delighlight(id: string) {
 			if(!id) {
 				return null;
 			}
@@ -104,7 +124,6 @@ export class Marker {
 			if(!element) {
 				return null;
 			}
-
 
 			for(let rule of styles) {
 				element.classList.remove(rule);
@@ -135,7 +154,7 @@ export class Marker {
 
 		this.setCanvasElement = setCanvasElement;
 		this.highlight = highlight;
-		this.smudge = smudge;
+		this.delighlight = delighlight;
 		this.remove = remove;
 		this.setCssStyleTemplate = setCssStyleTemplate;
 		this.empty = empty;
