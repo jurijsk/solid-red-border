@@ -2,9 +2,9 @@
 import { config } from "./config";
 
 type BoundingBox = {
-	top: number;
+	top?: number;
 	x?: number;
-	left: number;
+	left?: number;
 	y?: number;
 	width?: number;
 	height?: number;
@@ -19,6 +19,7 @@ Marker keeps track of highlights so that when you have to erase highlights, you 
 export function getMarker(name: string = 'generic', canvasElement?: HTMLElement) {
 	let marker = markers.get(name);
 	if(marker) {
+		canvasElement && marker.setCanvas(canvasElement);
 		return marker;
 	}
 
@@ -50,115 +51,134 @@ export function setStyle(name: string, style: string) {
 
 const DEFAULT_STYLE_TEMPLATE_TOKEN = '<default>';
 export class Marker {
-	setCanvasElement: (canvasElement: HTMLElement | null) => void;
-	highlight: (what: BoundingBox | HTMLElement, styleName: string, id?: string) => HTMLElement | null;
-	delighlight: (id: string) => HTMLElement | null;
-	remove: (id?: string) => void;
-	setCssStyleTemplate: (template: string) => void;
-	empty: () => void;
-	refull: () => void;
-
+	styleTemplate: string | null;
 
 	constructor(public name: string, public canvasElement: HTMLElement = document.body) {
-		let styleTemplate: string | null = DEFAULT_STYLE_TEMPLATE_TOKEN;
+		this.styleTemplate = DEFAULT_STYLE_TEMPLATE_TOKEN;
+	}
 
-		function setCssStyleTemplate(template: string | null | undefined) {
-			styleTemplate = template || null;
-		}
+	setCssStyleTemplate(template: string | null | undefined) {
+		this.styleTemplate = template || null;
+	}
 
-		function setCanvasElement(element: HTMLElement | null) {
-			canvasElement = element || document.body;
-		}
+	setCanvas(element: HTMLElement | null) {
+		this.canvasElement = element || document.body;
+	}
 
-		let hightlightElements = new Array<HTMLElement>();
-
-		function highlight(what: BoundingBox | HTMLElement, color?: string, id?: string) {
-			let element: HTMLElement | null = null;
-			if(what instanceof HTMLElement) {
-				element = what;
-			} else {
-				element = delighlight(id || '');
-				if(!element) {
-					element = document.createElement('span');
-
-					hightlightElements.push(element);
-					canvasElement.appendChild(element);
-					element.id = id || makeid(8);
-				}
-
-				element.style.position = 'absolute';
-				element.style.top = (what.top || what.x || 0) + 'px';
-				element.style.left = (what.left || what.y || 0) + 'px';
-				element.style.width = (what.width || 1) + 'px';
-				element.style.height = (what.height || 1) + 'px';
-
-				name && element.classList.add(name);
-				element.setAttribute('rsb-marked', name);
-			}
-
-			if(color) {
-				element.classList.add(color);
-				if(styles.indexOf(color) === -1) {
-					const template = styleTemplate === DEFAULT_STYLE_TEMPLATE_TOKEN
-						? config.markers.defaultStyleTemplate
-						: styleTemplate;
-
-					if(template) {
-						setStyle(color, template.replaceAll('{color}', color));
-					}
-
-				}
-			}
-			if(isEmpty) {
-				element.classList.add('empty-marker');
-			}
-			return element;
-		}
+	hightlightElements = new Array<HTMLElement>();
 
 
-		function delighlight(id: string) {
-			if(!id) {
-				return null;
-			}
-			const element = document.getElementById(id);
+	highlightUnique(what: BoundingBox | HTMLElement, id: string) {
+		this.highlight(what, id, id);
+	}
+
+	highlight(what: BoundingBox | HTMLElement, color?: string, id?: string) {
+		let element: HTMLElement | null = null;
+		if(what instanceof HTMLElement) {
+			element = what;
+		} else {
+			element = this.delighlight(id || '');
 			if(!element) {
-				return null;
+				element = document.createElement('span');
+
+				this.hightlightElements.push(element);
+				element.id = id || makeid(8);
 			}
 
-			for(let rule of styles) {
-				element.classList.remove(rule);
+			this.canvasElement.appendChild(element); //canvas might be different this time
+
+			element.style.position = 'absolute';
+			element.style.top = (what.top || what.x || 0) + 'px';
+			element.style.left = (what.left || what.y || 0) + 'px';
+			element.style.width = (what.width || 1) + 'px';
+			element.style.height = (what.height || 1) + 'px';
+
+			this.name && element.classList.add(this.name);
+			this.name && element.setAttribute('rsb-marked', this.name);
+		}
+
+		if(color) {
+			element.classList.add(color);
+			if(styles.indexOf(color) === -1) {
+				const template = this.styleTemplate === DEFAULT_STYLE_TEMPLATE_TOKEN
+					? config.markers.defaultStyleTemplate
+					: this.styleTemplate;
+
+				if(template) {
+					setStyle(color, template.replaceAll('{color}', color));
+				}
+
 			}
-			return element;
+		}
+		if(this.isEmpty) {
+			element.classList.add('empty-marker');
+		}
+		return element;
+	}
+
+	delighlight(id: string) {
+		if(!id) {
+			return null;
+		}
+		const element = document.getElementById(id);
+		if(!element) {
+			return null;
 		}
 
-		/** Removes all, or single higlights if id provide. Either removes the highlighting class or the the element itself if highliht was set using  for bounding boxes */
-		function remove(id?: string) {
-			if(id) {
-				const element = document.getElementById(id);
-				element?.remove();
-				return;
+		for(let rule of styles) {
+			element.classList.remove(rule);
+		}
+		return element;
+	}
+
+	/** Removes all, or single higlights if id provide. Either removes the highlighting class or the the element itself if highliht was set using  for bounding boxes */
+	removeById(id: string) {
+		const element = document.getElementById(id);
+		element?.remove();
+	}
+
+	removeByClass(className: string) {
+		const elements = document.getElementsByClassName(className);
+		for(let i = elements.length - 1;i >= 0;i--) {
+			elements[i].remove();
+			const index = this.hightlightElements.indexOf(elements[i] as HTMLElement);
+			if(index !== -1) {
+				this.hightlightElements.splice(index, 1);
 			}
-			hightlightElements.forEach(element => {
-				element.remove();
-			});
-			hightlightElements.length = 0;
 		}
+	}
 
-		let isEmpty = false;
-		function empty() {
-			isEmpty = true;
-		}
-		function refull() {
-			isEmpty = false;
-		}
 
-		this.setCanvasElement = setCanvasElement;
-		this.highlight = highlight;
-		this.delighlight = delighlight;
-		this.remove = remove;
-		this.setCssStyleTemplate = setCssStyleTemplate;
-		this.empty = empty;
-		this.refull = refull;
+	createClass(name: string, style: string) {
+		let styleElement = <HTMLStyleElement> document.getElementById('marker-styles');
+		if(!styleElement) {
+			styleElement = document.createElement('style');
+			styleElement.id = 'marker-styles';
+			document.head.appendChild(styleElement);
+			styleElement.innerHTML = '.empty-marker { background-color: #f00; }';
+		}
+		let sheet = styleElement.sheet;
+		if(!sheet) {
+			styleElement.innerHTML = `.${name} { ${style} }`;
+		} else {
+			sheet.insertRule(`.${name} { ${style} }`);
+		}
+	}
+
+	removeAll() {
+		this.hightlightElements.forEach(element => {
+			element.remove();
+		});
+		this.hightlightElements.length = 0;
+	}
+
+	isEmpty = false;
+
+	empty() {
+		this.isEmpty = true;
+	}
+	refull() {
+		this.isEmpty = false;
 	}
 }
 
