@@ -3,6 +3,13 @@
 	"version": "0.0.1",
 	"type": "module",
 	"description": "it like setting `border 1px solid red;` but on steroids",
+	"repository": {
+			"name": "@jurijsk/solid-red-border",
+			"repository": {
+			  "type": "git",
+			  "url": "https://github.com/jurijsk/solid-red-border.git"
+
+	},
 	"files": [
 		"dist"
 	],
