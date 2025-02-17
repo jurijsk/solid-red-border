@@ -31,6 +31,8 @@ jobs:
           always-auth: 'true'
           scope: '@jurijsk'
       - run: npm ci
+      - run: git config user.email "jurijs.kovzels@outlook.com"
+      - run: git config user.name "Jurijs Kovzels"
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
