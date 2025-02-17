@@ -1,7 +1,6 @@
 {
 	"name": "solid-red-border",
 	"version": "0.0.1",
-	"private": true,
 	"type": "module",
 	"description": "it like setting `border 1px solid red;` but on steroids",
 	"files": [
