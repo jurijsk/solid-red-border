@@ -3,9 +3,10 @@
 	"version": "0.0.1",
 	"type": "module",
 	"description": "it like setting `border 1px solid red;` but on steroids",
-	"repository": "https://github.com/jurijsk/solid-red-border",
-	"publishConfig": {
-		"registry": "https://npm.pkg.github.com/jurijsk/"
+	"repository": {
+		"name": "@jurijsk/solid-red-border",
+		"type": "git",
+		"url": "git+https://github.com/jurijsk/solid-red-border.git"
 	},
 	"files": [
 		"dist"
