@@ -1,6 +1,6 @@
 {
 	"name": "solid-red-border",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"type": "module",
 	"description": "it like setting `border 1px solid red;` but on steroids",
 	"repository": {
@@ -11,14 +11,8 @@
 	"files": [
 		"dist"
 	],
-	"main": "./dist/index.umd.cjs",
+	"main": "./dist/index.js",
 	"module": "./dist/index.js",
-	"exports": {
-		".": {
-			"require": "./dist/index.js",
-			"import": "./dist/index.umd.cjs"
-		}
-	},
 	"types": "./dist/index.d.ts",
 	"scripts": {
 		"dev": "vite --host",
@@ -35,7 +29,7 @@
 	},
 	"devDependencies": {
 		"@types/jsdom": "^21.1.6",
-		"@types/node": "^20.11.5",
+		"@types/node": "^20.17.19",
 		"@typescript-eslint/eslint-plugin": "^6.19.1",
 		"@typescript-eslint/parser": "^6.19.1",
 		"@vitest/coverage-v8": "^1.2.1",

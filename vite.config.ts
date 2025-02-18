@@ -25,6 +25,7 @@ export default defineConfig({
 		lib: {
 			entry: resolve(__dirname, "./sources/index.ts"),
 			name: 'index',
+			formats: ['es'],
 			'fileName': 'index'
 		},
 	},

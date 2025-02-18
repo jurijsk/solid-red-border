@@ -1,7 +1,8 @@
 
 import { debug, subscribe, Config, LogLevel } from "./config";
 
-const og = window.console;
+
+const og = console;
 const noop = () => {};
 const shadow = {
 	log: debug ? og.log : noop,
@@ -20,5 +21,6 @@ function reconfig(config: Config) {
 
 subscribe(reconfig);
 
-
-export const console = shadow;
+export {
+	shadow as console
+};
