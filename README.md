@@ -5,10 +5,13 @@ This a a set of debugging tool I use to code that affects HTML. Things like:
  * Logger
  * Execution control
 
- The this is configuralble.
+ The this is configurable.
 
 ### Marker
- An easy way to highlight an element on the page (hence the name of lib). This is especially usefull if you have to fighlight something if there is no undelying HTML element, for example when you are dwarig on the canvas.
+
+**this is super out of date, just see the API**
+
+ An easy way to highlight an element on the page (hence the name of lib). This is especially useful if you have to highlight something if there is no underlying HTML element, for example when you are drawing on the canvas.
 
  ```
 import { getMarker } from  "solid-red-border";
