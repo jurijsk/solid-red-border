@@ -18,13 +18,13 @@ export function halt(func: () => void) {
 	}
 }
 
-export function assume(func: () => any) {
-	let result = func();
+export function assume(assumption: () => any, message?: string) {
+	let result = assumption();
 
 	if(result === true) {
 		return;
 	}
-	console.warn('false assumption', result);
+	console.warn('false assumption', message, result);
 	if(debug) {
 		debugger;
 	}
