@@ -7,7 +7,7 @@
 			"ESNext",
 			"DOM"
 		],
-		"moduleResolution": "Node",
+		"moduleResolution": "Bundler",
 		"strict": true,
 		"sourceMap": true,
 		"resolveJsonModule": true,
@@ -31,6 +31,7 @@
 	"exclude": [
 		"**/*.test.ts",
 		"node_modules",
+		"dist/**",
 		"test/**",
 		".history/**"
 	],

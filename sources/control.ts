@@ -13,6 +13,7 @@ export function dbg_dummy<T>(_func: () => T) {
 
 export function halt(func: () => void) {
 	if(debug) {
+		// oxlint-disable-next-line no-debugger
 		debugger;
 		func();
 	}
@@ -26,6 +27,7 @@ export function assume(assumption: () => any, message?: string) {
 	}
 	console.warn('false assumption', message, result);
 	if(debug) {
+		// oxlint-disable-next-line no-debugger
 		debugger;
 	}
 }

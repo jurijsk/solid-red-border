@@ -32,11 +32,11 @@ marker.removeAll();
 
 function experiment() {
 
-	const iamgeElements = document.querySelectorAll('img');
+	const imageElements = document.querySelectorAll('img');
 
 
-	for(let i = 0;i < iamgeElements.length;i++) {
-		const img = iamgeElements[i];
+	for(let i = 0;i < imageElements.length;i++) {
+		const img = imageElements[i];
 		const request = new Request(img.currentSrc || img.src);
 
 		fetch(request)

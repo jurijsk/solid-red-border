@@ -3,6 +3,7 @@
 	"version": "0.0.2",
 	"type": "module",
 	"description": "it like setting `border 1px solid red;` but on steroids",
+	"license": "MIT",
 	"repository": {
 		"name": "@jurijsk/solid-red-border",
 		"type": "git",
@@ -14,45 +15,25 @@
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"sideEffects": false,
 	"scripts": {
 		"dev": "vite --host",
-		"build": "rimraf ./dist && tsc && vite build",
-		"tsc": "npx tsc",
-		"test:coverage": "vitest --coverage",
-		"lint:scripts": "eslint . --ext .ts",
-		"lint:styles": "stylelint ./**/*.{css,scss}",
-		"format:scripts": "prettier . --write",
-		"format:styles": "stylelint ./**/*.{css,scss} --fix",
-		"format": "npm run format:scripts && npm run format:styles",
-		"xxprepare": "husky install && husky set .husky/pre-commit 'npx lint-staged' && git add .husky/pre-commit",
-		"xxuninstall-husky": "npm uninstall husky --no-save && git config --unset core.hooksPath && npx rimraf .husky"
+		"build": "rimraf ./dist && vite build",
+		"test": "vitest run",
+		"prepack": "npm run build"
 	},
 	"devDependencies": {
-		"@types/jsdom": "^21.1.6",
-		"@types/node": "^20.17.19",
-		"@typescript-eslint/eslint-plugin": "^6.19.1",
-		"@typescript-eslint/parser": "^6.19.1",
-		"@vitest/coverage-v8": "^1.2.1",
-		"copyfiles": "^2.4.1",
-		"dts-bundle-generator": "^9.2.4",
-		"eslint": "^8.56.0",
-		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-prettier": "^5.1.3",
-		"lint-staged": "^15.2.0",
-		"npm-packlist": "^10.0.0",
-		"postcss": "^8.4.33",
-		"postcss-scss": "^4.0.9",
-		"prettier": "^3.2.4",
-		"rimraf": "^5.0.5",
-		"stylelint": "^16.2.0",
-		"stylelint-config-recommended": "^14.0.0",
-		"stylelint-config-sass-guidelines": "^11.0.0",
-		"stylelint-order": "^6.0.4",
-		"stylelint-prettier": "^5.0.0",
-		"ts-node": "^10.9.2",
-		"typescript": "^5.3.3",
-		"vite": "^5.0.12",
-		"vite-plugin-dts": "^3.7.3",
-		"vitest": "^1.2.1"
+		"@types/node": "^25.8.0",
+		"rimraf": "^6.1.3",
+		"typescript": "^6.0.3",
+		"vite": "^8.0.13",
+		"vite-plugin-dts": "^5.0.0",
+		"vitest": "^4.1.6"
 	}
 }

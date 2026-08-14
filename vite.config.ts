@@ -11,11 +11,12 @@ export default defineConfig({
 
 	plugins: [
 		dts({
-			outDir: 'dist', // dts.root + 'dist' => where we need to rollup.
+			outDirs: ['dist'], // dts.root + 'dist' => where we need to rollup.
 			root: "./", //vite.root + ../ = ./ = (dts.root)
+			include: ['sources/**/*.ts'],
+			exclude: ['**/*.test.ts', 'test/**', 'demo.ts', 'vite.config.ts'],
 			staticImport: true,
-			insertTypesEntry: true,
-			rollupTypes: true
+			insertTypesEntry: true
 		})
 	],
 	build: {
@@ -29,8 +30,7 @@ export default defineConfig({
 			'fileName': 'index'
 		},
 	},
-	test: {},
 	resolve: {
-		alias: [{ find: packageName, replacement: resolve(__dirname, 'index.ts') }]
+		alias: [{ find: packageName, replacement: resolve(__dirname, 'sources/index.ts') }]
 	}
 });
